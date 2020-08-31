@@ -29,6 +29,7 @@ module.exports = {
         components: path.join(__dirname, 'src/components'),
         vectors: path.join(__dirname, 'src/vectors'),
         images: path.join(__dirname, 'src/images'),
+        helpers: path.join(__dirname, 'src/helpers'),
       },
     },
   ],
