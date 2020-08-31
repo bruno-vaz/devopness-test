@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Title, Link, Meta } from 'react-head';
 
-import FaviconVector from 'vectors/favicon.svg';
+import FaviconVector from 'vectors/favicon-dark.svg';
 import DefaultOgImage from 'images/og-image.png';
 
 const SEO = ({
