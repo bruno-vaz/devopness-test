@@ -13,7 +13,7 @@ export const Content = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 42px;
-  padding: 80px 0;
+  padding: 80px 0 120px;
   text-align: center;
 
   > svg {
