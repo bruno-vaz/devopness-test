@@ -11,6 +11,7 @@
     "lint": "./node_modules/.bin/eslint \"src/**/*.{js,jsx}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
+    "run-local": "gatsby build && gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
