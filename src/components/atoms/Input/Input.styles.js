@@ -4,6 +4,7 @@ export const Wrapper = styled.input`
   background: none;
   display: block;
   width: 300px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 0;
   border: 0;
