@@ -2,6 +2,7 @@
   --main: #35c;
   --main-light: #d6ddf5;
   --gray: #333;
+  --gray-light: #999;
 }
 * {
   box-sizing: border-box;
