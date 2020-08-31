@@ -4,12 +4,20 @@ export const Wrapper = styled.div`
   color: #fff;
   font-size: 20px;
 
+  @media (max-width: 660px) {
+    font-size: 16px;
+  }
+
   h1, h2, h3, h4, h5 {
     font-weight: 800;
   }
   h1 {
     margin-bottom: 30px;
     font-size: 32px;
+
+    @media (max-width: 660px) {
+      font-size: 24px;
+    }
   }
 
   p {
