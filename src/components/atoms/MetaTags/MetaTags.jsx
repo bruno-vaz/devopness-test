@@ -10,7 +10,7 @@ const SEO = ({
 }) => (
   <>
     <Title>{title}</Title>
-    <Meta name="theme-color" content="#3355ff" />
+    <Meta name="theme-color" content="#000" />
     <Meta name="description" content={description} />
     <Meta property="og:image" content={`${image}`} />
     <Meta property="og:image:alt" content={imageDescription} />
