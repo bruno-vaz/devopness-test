@@ -2,8 +2,9 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.input`
   background: none;
-  display: inline-block;
+  display: block;
   width: 300px;
+  margin: 0 auto;
   padding: 0;
   border: 0;
   border-bottom: 2px solid var(--gray-light);

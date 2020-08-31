@@ -7,6 +7,9 @@ const Input = ({ name, value, onChange }) => (
   <Wrapper
     name={name}
     value={value}
+    type="number"
+    min="100"
+    step="100"
     onChange={onChange}
   />
 );

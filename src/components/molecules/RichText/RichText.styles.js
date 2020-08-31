@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  color: var(--gray);
+  color: #fff;
   font-size: 20px;
 
   h1, h2, h3, h4, h5 {

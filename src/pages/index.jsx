@@ -1,85 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
-import axios from 'axios';
+
+import Layout from 'components/theme/Layout';
+import MetaTags from 'components/atoms/MetaTags';
+import Basic from 'components/templates/Basic';
+import Input from 'components/atoms/Input';
+import Table from 'components/molecules/Table';
+import Placeholder from 'components/atoms/Placeholder';
+
+import getAllStarships from 'helpers/getAllStarships';
+import calculateStops from 'helpers/calculateStops';
 
 const Page = () => {
+  const [mglt, setMglt] = useState('1000000');
+
   const [starships, setStarships] = useState(undefined);
   useEffect(() => {
-    setStarships({ isLoading: true });
-    axios.get('https://cors-anywhere.herokuapp.com/https://swapi.dev/api/starships/')
-      .then((response) => {
-        setStarships(response.data.results);
+    getAllStarships()
+      .then((result) => {
+        setStarships(result);
       });
   }, []);
-
-  const [calcData, setCalcData] = useState({
-    mglt: undefined,
-    result: undefined,
-  });
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setCalcData((currentData) => ({
-      ...currentData,
-      [name]: value,
-    }));
-  };
-
-  const result = (starshipMglt, consumables, mglt) => {
-    const consArr = consumables.split(' ');
-    const consAsDays = moment.duration(consArr[0], consArr[1]).asDays();
-    return mglt / (starshipMglt * 24 * consAsDays);
-  };
-
-  const calc = (event) => {
-    event.preventDefault();
-    const { mglt } = calcData;
-    handleChange({
-      target: {
-        name: 'result',
-        value: starships.map(({ name, MGLT, consumables }) => ({
+  const [results, setResults] = useState(undefined);
+  useEffect(() => {
+    if (starships) {
+      setResults(
+        starships.map(({ name, MGLT, consumables }) => ({
           name,
-          stops: result(parseInt(MGLT, 10), consumables, mglt),
+          stops: calculateStops(MGLT, consumables, mglt),
         })),
-      },
-    });
-  };
+      );
+    }
+  }, [mglt, starships]);
+
   return (
-    <section>
-      <h1>Calculator PoC</h1>
-      <form onSubmit={calc}>
-        <input
-          type="number"
-          name="mglt"
-          placeholder="Target MGLT"
-          value={calcData.mglt}
-          onChange={handleChange}
-        />
-        <button type="submit">Calculate</button>
-      </form>
-      {(starships && calcData.result)
-        ? (
-          <div>
-            <h2>Starship list</h2>
-            {starships.isLoading
-              ? (
-                <h4>Loading...</h4>
-              ) : (
-                <ul>
-                  {calcData.result.map(({ name, stops }) => (
-                    <li key={name}>
-                      <b>{name}</b>
-                      :
-                      {' '}
-                      {Math.round(stops)}
-                    </li>
-                  ))}
-                </ul>
-              )}
-          </div>
-        ) : null}
-      <pre />
-    </section>
+    <Layout>
+      <MetaTags />
+      <Basic>
+        <h1>
+          How many stops are necessary to travel
+          <Input
+            name="mglt"
+            value={mglt}
+            onChange={(e) => setMglt(e.target.value)}
+          />
+          megalights?
+        </h1>
+        {(results && mglt)
+          ? (
+            <Table mglt={mglt} ships={results} />
+          ) : (
+            <Placeholder
+              status={results ? 'waiting' : 'loading'}
+            />
+          )}
+      </Basic>
+    </Layout>
   );
 };
 

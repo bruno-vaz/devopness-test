@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   z-index: 1;
   min-height: 100vh;
   display: grid;
-  place-items: center;
+  background-color: #111;
 `;
 export const Content = styled.div`
   position: relative;
@@ -13,7 +13,7 @@ export const Content = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 42px;
-  margin-top: -76px;
+  padding: 80px 0;
   text-align: center;
 
   > svg {
@@ -30,19 +30,19 @@ export const Blobs = styled.div`
   left: 0;
   pointer-events: none;
   overflow: hidden;
-  font-size: 100px;
+  font-size: 80px;
 
   @media (max-width: 1200px) {
-    font-size: 80px;
-  }
-  @media (max-width: 900px) {
     font-size: 60px;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 900px) {
     font-size: 44px;
   }
-  @media (max-width: 440px) {
+  @media (max-width: 600px) {
     font-size: 32px;
+  }
+  @media (max-width: 440px) {
+    font-size: 24px;
   }
 
   > svg {
