@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import axios from 'axios';
 
 const Page = () => {
+  const [starships, setStarships] = useState(undefined);
+  useEffect(() => {
+    setStarships({ isLoading: true });
+    axios.get('https://cors-anywhere.herokuapp.com/https://swapi.dev/api/starships/')
+      .then((response) => {
+        setStarships(response.data.results);
+      });
+  }, []);
+
   const [calcData, setCalcData] = useState({
-    starshipMglt: 75,
-    consumables: '2 months',
-    mglt: 1000000,
+    mglt: undefined,
     result: undefined,
   });
 
@@ -17,43 +25,29 @@ const Page = () => {
     }));
   };
 
-  const calc = (event) => {
-    console.group('calc');
-    event.preventDefault();
-    const { starshipMglt, consumables, mglt } = calcData;
-    console.log({ starshipMglt, consumables, mglt });
+  const result = (starshipMglt, consumables, mglt) => {
     const consArr = consumables.split(' ');
-    console.log({ consArr });
-    const consumablesInDays = moment.duration(consArr[0], consArr[1]).asDays();
-    console.log({ consumablesInDays });
-    const result = mglt / (starshipMglt * 24 * consumablesInDays);
-    console.log({ result });
+    const consAsDays = moment.duration(consArr[0], consArr[1]).asDays();
+    return mglt / (starshipMglt * 24 * consAsDays);
+  };
+
+  const calc = (event) => {
+    event.preventDefault();
+    const { mglt } = calcData;
     handleChange({
       target: {
         name: 'result',
-        value: result,
+        value: starships.map(({ name, MGLT, consumables }) => ({
+          name,
+          stops: result(parseInt(MGLT, 10), consumables, mglt),
+        })),
       },
     });
-    console.groupEnd();
   };
   return (
     <section>
       <h1>Calculator PoC</h1>
       <form onSubmit={calc}>
-        <input
-          type="number"
-          name="starshipMglt"
-          placeholder="Starship MGLT"
-          value={calcData.starshipMglt}
-          onChange={handleChange}
-        />
-        <input
-          type="string"
-          name="consumables"
-          placeholder="Starship Consumables"
-          value={calcData.consumables}
-          onChange={handleChange}
-        />
         <input
           type="number"
           name="mglt"
@@ -63,19 +57,28 @@ const Page = () => {
         />
         <button type="submit">Calculate</button>
       </form>
-      <div>
-        <h2>Result</h2>
-        {calcData.result
-          ? (
-            <div>
-              This ship will need
-              {' '}
-              {calcData.result}
-              {' '}
-              stops to travel the desired MGLT distance.
-            </div>
-          ) : null}
-      </div>
+      {(starships && calcData.result)
+        ? (
+          <div>
+            <h2>Starship list</h2>
+            {starships.isLoading
+              ? (
+                <h4>Loading...</h4>
+              ) : (
+                <ul>
+                  {calcData.result.map(({ name, stops }) => (
+                    <li key={name}>
+                      <b>{name}</b>
+                      :
+                      {' '}
+                      {Math.round(stops)}
+                    </li>
+                  ))}
+                </ul>
+              )}
+          </div>
+        ) : null}
+      <pre />
     </section>
   );
 };
